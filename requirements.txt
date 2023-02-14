@@ -1,0 +1,4 @@
+Pillow==9.4.0
+instagrapi==1.16.33
+python-dotenv==0.21.1
+ipdb==0.13.11
