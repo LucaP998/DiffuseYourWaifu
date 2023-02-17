@@ -3,8 +3,8 @@ import os
 import shutil
 import logging
 from dotenv import load_dotenv
+from PIL import Image
 from instagrapi import Client
-
 from .ig_costants import names, surnames, hashtag_ai, hashtag_anime
 from .settings import DEBUG
 
@@ -59,8 +59,18 @@ class DiffuseYourWaifu():
 
     def _get_random_photo(self):
         for file_path in os.listdir(self.DEFAULT_IMAGE_TODO_FOLDER):
-            if file_path.lower().endswith("png") or file_path.lower().endswith("jpg"):
+            if file_path.lower().endswith("jpg"):
                 return f"{self.DEFAULT_IMAGE_TODO_FOLDER}/{file_path}"
+            if file_path.lower().endswith("png"):
+                path = f"{self.DEFAULT_IMAGE_TODO_FOLDER}/{file_path}"
+                image_to_convert = Image.open(path)
+                rgb_image = image_to_convert.convert('RGB')
+                new_path = path.replace('png', 'jpg').replace(
+                    'PNG', 'jpg')  # ugly
+                rgb_image.save(new_path)
+                os.remove(path)
+                return new_path
+
         raise NoWaifuFound(
             f'No waifu found in {self.DEFAULT_IMAGE_TODO_FOLDER}')
 
@@ -78,7 +88,7 @@ class DiffuseYourWaifu():
         print(f'Upload WAIFU from: {image_path}\n\nPOST:\n\n{description}')
         if not DEBUG:
             self.client.photo_upload(
-                image_path, self.get_post_description(extra_hashtag))
+                image_path, description)
 
         self._move_photo_to_done(image_path)
 
