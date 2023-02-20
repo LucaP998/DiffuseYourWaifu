@@ -57,6 +57,13 @@ class DiffuseYourWaifu():
             extra=' '.join(extra_hashtag)
         )
 
+
+    def correct_hashtags(self, extra_hashtags):
+        corrected_hashtag_list =[]
+        for hashtag in extra_hashtags:
+            corrected_hashtag_list.append(f"#{extra_hashtags}")
+        return corrected_hashtag_list
+
     def _get_random_photo(self):
         for file_path in os.listdir(self.DEFAULT_IMAGE_TODO_FOLDER):
             if file_path.lower().endswith("jpg"):

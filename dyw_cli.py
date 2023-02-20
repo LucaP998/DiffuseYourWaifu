@@ -8,6 +8,6 @@ if __name__ == "__main__":
     #BUG: if we write argument that start with #
     parser.add_argument("-e", "--extra", nargs="+", help="Add a list of extra hashtag", default=[])
     args = parser.parse_args()
-    
-    diffuse_your_waifu_client.upload_photo(args.path)
+    extra_hashtags = diffuse_your_waifu_client.correct_hashtags(args.extra)
+    diffuse_your_waifu_client.upload_photo(args.path, extra_hashtags)
     
