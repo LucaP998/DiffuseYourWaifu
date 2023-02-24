@@ -45,7 +45,9 @@ class DiffuseYourWaifu():
         return self._client
 
     def _get_full_name(self):
-        return f"{random.choice(names)} {random.choice(surnames)}"
+        name = random.choice(names)
+        surname = random.choice(surnames)
+        return f"{name['romaji']} {surname['romaji']}\n🇯🇵 ~ {name['kanji']} {surname['kanji']}"
 
     def _get_hashtag(self):
         return "{} {}".format(
