@@ -16,6 +16,9 @@ class NoWaifuFound(Exception):
     pass
 
 
+class NoWaifuUploaded(Exception):
+    pass
+
 class WaifuDirectoryNotExists(Exception):
     pass
 
@@ -83,6 +86,7 @@ class DiffuseYourWaifu():
 
     def _move_photo_to_done(self, path):
         shutil.move(path, os.path.join(self.DEFAULT_IMAGE_DONE_FOLDER))
+        print(f"\n\nimage successfully moved to {self.DEFAULT_IMAGE_DONE_FOLDER} folder")
 
     def upload_photo(self, image_path=None, extra_hashtag=[]):
         if not image_path:
@@ -94,8 +98,10 @@ class DiffuseYourWaifu():
         description = self.get_post_description(extra_hashtag=extra_hashtag)
         print(f'Upload WAIFU from: {image_path}\n\nPOST:\n\n{description}')
         if not DEBUG:
-            self.client.photo_upload(
-                image_path, description)
+            uploaded_media = self.client.photo_upload(image_path, description)
+            if not uploaded_media:
+                raise NoWaifuUploaded
+            print(f"\n\nwaifu successfully uploaded to url: https://www.instagram.com/p/{uploaded_media.code}/")
 
         self._move_photo_to_done(image_path)
 
